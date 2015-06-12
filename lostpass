@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+def usage()
+	puts "Usage:   lostpass create category name password [optional=optional optional=optional]"
+	puts "Examble: lostpass create games steam MyPassword username=myusername"
+end
+
+if ARGV.count < 3
+	usage()
+else
+	if ARGV[0] == "create"
+		ARGV.delete_at(0)
+		puts category = ARGV.delete_at(0)
+		puts name = ARGV.delete_at(0)
+		puts password = ARGV.delete_at(0)
+	
+		puts `echo '#{password}' | pass insert -e #{category}/#{name}/password`
+		ARGV.each do|a|
+			nameval = a.split("=")
+			optname = nameval[0]
+			optvalue = nameval[1]
+			puts `echo '#{optvalue}' | pass insert -e #{category}/#{name}/#{optname}`
+		end
+	else
+		usage()
+	end
+	
+end
+
+
+
